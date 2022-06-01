@@ -6,5 +6,8 @@ setup:
 run:
 	poetry run python src/app.py
 
+test:
+	poetry run pytest tests
 
-.PHONY: all setup run
+
+.PHONY: all setup run test
