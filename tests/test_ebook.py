@@ -31,3 +31,18 @@ def test_getchapters():
     chapters = src.ebook.get_chapters(b)
     assert chapters is not None
     assert len(chapters) > 0
+
+
+def test_extract_text_from_chapter_cover():
+    eb = src.ebook.load_ebook("tests/resources/pg1661.epub")
+    text = src.ebook._extract_text_from_chapter(eb.chapters[0])
+    assert text is not None
+    assert text == ''
+    
+
+def test_extract_text_from_chapter_chapter1():
+    eb = src.ebook.load_ebook("tests/resources/pg1661.epub")
+    text = src.ebook._extract_text_from_chapter(eb.chapters[2])
+    assert text is not None
+    assert text == ''
+    

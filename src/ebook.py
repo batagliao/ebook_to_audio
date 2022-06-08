@@ -1,7 +1,8 @@
 import ebooklib
 from ebooklib import epub
+from bs4 import BeautifulSoup, NavigableString
 
-from .book import Book
+from book import Book
 
 
 def load_ebook(path):
@@ -84,7 +85,32 @@ def get_chapters(ebook):
         if len(item) == 0:
             continue
 
-        content = item[0].get_body_content()
+        content = item[0].content
         chapters.append(content)
 
     return chapters
+
+
+def extract_text(chapters):
+    strings = []
+    for c in chapters:
+        text = _extract_text_from_chapter(c)
+        strings.append(text)
+
+    return '\n, '.join(strings)
+
+def _extract_text_from_chapter(chapter):
+    soup = BeautifulSoup(chapter, "lxml")
+    ##
+    #with open('chapter.html', 'w') as file:
+    #    file.write(soup.prettify())
+    #print(soup.prettify())
+    ##
+
+    # run through the tree getting only the tags that we need
+    # h1, h2, h3, h4, h5. h6, p, b, i, s
+    body = soup.body
+    elements = body.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'p'])
+    text = '\n, '.join([s.get_text(strip=True) for s in elements])
+    return text
+
